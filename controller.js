@@ -30,9 +30,15 @@ const check = async (req, res) => {
     // console.log(req.query.qr_code)
     //get qr_code from local machine
     let qr_code = req.query.qr_code;
-    // let timestamp = Math.floor(Date.now() /1000);
+    let timestamp = Math.floor(Date.now() /1000);
+    // console.log(timestamp);
     //get updated paymend data according to qr_code and send state
     data = await PayStatus.find({ qr_code: qr_code }).sort({timestamp:-1}).limit(1);
+    // console.log(data[0].timestamp);
+    if(timestamp-data[0].timestamp > 40 )
+    {   
+        data[0].status = false;
+    }
     // data = await PayStatus.find({ qr_code: qr_code });
     // filter({ qr_code: qr_code });
     res.status(200).send(data);
