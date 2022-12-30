@@ -31,11 +31,21 @@ const check = async (req, res) => {
     //get qr_code from local machine
     let qr_code = req.query.qr_code;
     let timestamp = Math.floor(Date.now() /1000);
+    
+    all_data = await PayStatus.find({ qr_code: qr_code });
+    all_data.forEach(element => {
+        if(timestamp - element.timestamp >  40)
+        {
+            element.remove()
+        }
+        
+    });
+    // PayStatus.deleteMany( { title: "Titanic" } )
     // console.log(timestamp);
     //get updated paymend data according to qr_code and send state
     data = await PayStatus.find({ qr_code: qr_code }).sort({timestamp:-1}).limit(1);
     // console.log(data[0].timestamp);
-    if(timestamp-data[0].timestamp > 40 )
+    if((data.length>0)&&(timestamp-data[0].timestamp > 40 ))
     {   
         data[0].status = false;
     }
