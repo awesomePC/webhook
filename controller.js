@@ -10,7 +10,9 @@ const update = async (req, res) => {
         const newPayStatus = new PayStatus();
         newPayStatus.qr_code = req.body.payload.qr_code.entity.id;
         newPayStatus.status = data.captured;
-        newPayStatus.timestamp =  data.created_at;
+        let timestamp = Math.floor(Date.now() /1000);
+        newPayStatus.timestamp =  timestamp;
+        // newPayStatus.timestamp =  data.created_at;
         
         await newPayStatus.save();
         console.log(newPayStatus);
@@ -28,9 +30,10 @@ const check = async (req, res) => {
     // console.log(req.query.qr_code)
     //get qr_code from local machine
     let qr_code = req.query.qr_code;
-    
+    // let timestamp = Math.floor(Date.now() /1000);
     //get updated paymend data according to qr_code and send state
-    data = await PayStatus.find({ qr_code: qr_code });
+    data = await PayStatus.find({ qr_code: qr_code }).sort({timestamp:-1}).limit(1);
+    // data = await PayStatus.find({ qr_code: qr_code });
     // filter({ qr_code: qr_code });
     res.status(200).send(data);
 }

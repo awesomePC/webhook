@@ -26,7 +26,7 @@ const connectDB = async () => {
 connectDB()
 
 app.get("/check", Controller.check);
-app.get("/", (req, res) => {res.send("dddd")});
+app.get("/", (req, res) => {res.send("Hello")});
 app.post("/update", Controller.update);
 
 app.listen(port, () => {
