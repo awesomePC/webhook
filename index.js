@@ -122,8 +122,12 @@ async function listMajors(auth) {
 //     // Print columns A and E, which correspond to indices 0 and 4.
 //     console.log(`${row[0]}, ${row[4]}`);
 //   });
-    let date = new Date();
-    
+    //server time
+    // let date = new Date();
+    //indian timezone must
+    let india_datetime_str = new Date().toLocaleString("en-US", { timeZone: "Asia/Calcutta" });
+    // create new Date object
+    let date = new Date(india_datetime_str);
     date.setHours(0, 0, 0, 0);
     
     all_log = await GameLog.find({date: date});
@@ -142,8 +146,13 @@ async function listMajors(auth) {
         row.push((element['restart_time'].getHours()>=10?element['restart_time'].getHours():"0"+element['restart_time'].getHours())+":"+(element['restart_time'].getMinutes()>=10?element['restart_time'].getMinutes():"0"+element['restart_time'].getMinutes())+":"+(element['restart_time'].getSeconds()>=10?element['restart_time'].getSeconds():"0"+element['restart_time'].getSeconds()));
       }
       // row.push((element['restart_time'].getHours()>=10?element['restart_time'].getHours():"0"+element['restart_time'].getHours())+":"+(element['restart_time'].getMinutes()>=10?element['restart_time'].getMinutes():"0"+element['restart_time'].getMinutes()));
-      let min = (parseInt(element['duration'])/60).toFixed(0);
+      let min = Math.floor(parseInt(element['duration'])/60);
       let sec = parseInt(element['duration'])%60;
+
+      if(min == 4)
+      {
+        sec = 0;
+      }
       // console.log(parseInt(element['duration'])%60,element['duration'],min,sec)
       row.push((min>=10?min:"0"+min)+":"+(sec>=10?sec:"0"+sec));
       row.push(element['payment']);
@@ -184,7 +193,7 @@ async function listMajors(auth) {
 setInterval(()=>{
   console.log("start send data to sheet!");
   authorize().then(listMajors).catch(console.error);
-}, 6*1000);
+}, 24*60*60*1000);
 // 4*60*
 //end google sheet
 app.listen(port, () => {

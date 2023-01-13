@@ -61,14 +61,19 @@ const gamelog = async(req, res) => {
         console.log(req.body)
         let is_new = req.body.is_new;
         let qr_code = req.body.qr_code;
-        let date = new Date()
+
+        let india_datetime_str = new Date().toLocaleString("en-US", { timeZone: "Asia/Calcutta" });
+        // create new Date object
+        let date = new Date(india_datetime_str);
+        // let date = new Date()
         date.setHours(0, 0, 0, 0);
         // let userInput = '09:20';
         let userInput = req.body.start_time;
         let hours = userInput.slice(0, 2);
         let minutes = userInput.slice(3, 5);
         let seconds = userInput.slice(6, 8);
-        let start_date = new Date();
+
+        let start_date = new Date(india_datetime_str);
         start_date.setHours(hours, minutes, seconds, 0);
 
         //restart
@@ -76,7 +81,7 @@ const gamelog = async(req, res) => {
         let re_hours = re_userInput.slice(0, 2);
         let re_minutes = re_userInput.slice(3, 5);
         let re_seconds = re_userInput.slice(6, 8);
-        let re_start_date = new Date();
+        let re_start_date = new Date(india_datetime_str);
         re_start_date.setHours(re_hours, re_minutes, re_seconds, 0);
 
         if(is_new == 'true') {
@@ -99,7 +104,7 @@ const gamelog = async(req, res) => {
             // gamelog.qr_code = req.body.qr_code;
             gamelog = gamelog[0];
             console.log(gamelog)
-            gamelog.date = date;
+            // gamelog.date = date;
             // gamelog.start_time = req.body.start_time;
             // gamelog.restart_time = req.body.restart_time;
             // gamelog.game_id = req.body.game_id;
